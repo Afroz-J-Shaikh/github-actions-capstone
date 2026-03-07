@@ -14,7 +14,14 @@ export default [
         babelOptions: {
           presets: ["@babel/preset-react"]
         }
+      },
+      globals: {
+        document: "readonly",
+        window: "readonly"
       }
+    },
+    rules: {
+      "no-unused-vars": ["error", { "varsIgnorePattern": "React|^[A-Z]" }]
     }
   }
 ];
