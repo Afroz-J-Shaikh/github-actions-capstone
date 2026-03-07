@@ -15,10 +15,7 @@ jobs:
           cache: npm
 
       - name: install eslint
-        run: |
-          npm install eslint --save-dev
-          npm install --save-dev @eslint/js
-
+        run: npm install eslint --save-dev
 
       - name: install dependencies
         run: npm ci
