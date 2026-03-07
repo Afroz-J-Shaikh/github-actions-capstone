@@ -14,9 +14,8 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: install eslint
+      - name: install eslint + parser
         run: npm install --save-dev eslint@9 @eslint/js@9 @babel/eslint-parser @babel/preset-react --legacy-peer-deps
-
 
       - name: install dependencies
         run: npm ci

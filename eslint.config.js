@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import babelParser from "@babel/eslint-parser";
 
 export default [
   js.configs.recommended,
@@ -7,11 +8,11 @@ export default [
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      parser: require.resolve("@babel/eslint-parser"),
+      parser: babelParser,
       parserOptions: {
         requireConfigFile: false,
         babelOptions: {
-          presets: [require.resolve("@babel/preset-react")]
+          presets: ["@babel/preset-react"]
         }
       }
     }
