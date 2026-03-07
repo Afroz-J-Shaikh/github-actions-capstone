@@ -18,6 +18,7 @@ jobs:
         run: |
           npm install eslint --save-dev
           npm install --save-dev @eslint/js
+          npm install --save-dev eslint-plugin-react eslint-plugin-react-hooks
 
       - name: install dependencies
         run: npm ci
