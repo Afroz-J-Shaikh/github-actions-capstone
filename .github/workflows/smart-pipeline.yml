@@ -15,7 +15,7 @@ jobs:
           cache: npm
 
       - name: install eslint
-        run: npm install --save-dev eslint@9 @eslint/js@9 eslint-plugin-react eslint-plugin-react-hooks --legacy-peer-deps
+        run: npm install --save-dev eslint@9 @eslint/js@9 @babel/eslint-parser @babel/preset-react --legacy-peer-deps
 
 
       - name: install dependencies
