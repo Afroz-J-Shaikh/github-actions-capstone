@@ -23,9 +23,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker.yml
     with:
       image_name: "my-app"
-      tags: |
-        - latest
-        - ${{ needs.short.outputs.SHORT_SHA }}
+      tags: ${{ github.sha }}
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

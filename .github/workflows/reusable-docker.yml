@@ -49,7 +49,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
+          tags: |-
+            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:latest
             ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:${{ inputs.tags }}
 
       - name: output
