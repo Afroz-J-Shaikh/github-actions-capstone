@@ -55,7 +55,4 @@ jobs:
 
       - name: output
         id: set-url
-        run: |
-          tags="${{ steps.get-url.outputs.tags }}"
-          digest="${{ steps.get-url.outputs.digest }}"
-          echo "url=$tags@$digest" >> $GITHUB_OUTPUT
+        run: echo "image_url=${{ inputs.image_name }}:${{ inputs.tags }}" >> "$GITHUB_OUTPUT"
