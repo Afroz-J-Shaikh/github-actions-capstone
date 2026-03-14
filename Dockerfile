@@ -12,12 +12,20 @@ RUN npm run build
 
 RUN ls -la /app
 
-FROM nginx:alpine
+FROM node:20-slim AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/build /usr/share/nginx/html
+ENV NODE_ENV=production
 
-EXPOSE 80
+# Copy built assets and server file
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/package*.json ./
 
-CMD ["nginx","-g","daemon off;"]
+# Install only production dependencies (express)
+RUN npm install --omit=dev
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
