@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: short sha
-        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
   build-test:
     uses: ./.github/workflows/reusable-build-test.yml
@@ -23,7 +24,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker.yml
     with:
       image_name: "my-app"
-      tags: ${{ needs.short.outputs.SHORT_SHA }}
+      tags: sha-${{ needs.short.outputs.SHORT_SHA }}
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
