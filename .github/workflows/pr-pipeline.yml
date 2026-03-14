@@ -19,6 +19,8 @@ jobs:
     if: needs.build-test.result == 'success'
 
     steps:
-    
+
       - name: print summary
-        run: echo "PR checks passed for branch :" ${{ github.head_ref }}
+        run: |
+          echo "PR checks passed for branch :" ${{ github.head_ref }}
+          echo "Test results :" ${{ needs.build-test.outputs.test_result }}
