@@ -4,20 +4,20 @@ on:
   #workflow_call:
   push:
   
-  inputs:
-   
-    node_version:
-      type: string
-      default: '20'
+    inputs:
+      
+      node_version:
+        type: string
+        default: '20'
 
-    run_tests:
-      type: boolean
-      default: true
+      run_tests:
+        type: boolean
+        default: true
 
-  outputs:
+    outputs:
 
-    test_result:
-      value: ${{ steps.result.outcome }}
+      test_result:
+        value: ${{ steps.result.outcome }}
 
 jobs:
 
