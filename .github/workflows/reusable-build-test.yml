@@ -1,0 +1,47 @@
+name: build-test
+
+on:
+  #workflow_call:
+  push:
+  
+  inputs:
+   
+    node_version:
+      type: string
+      default: '20'
+
+    run_tests:
+      type: boolean
+      default: true
+
+  outputs:
+
+    test_result:
+      value: ${{ steps.result.outcome }}
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: code checkout
+        uses: actions/checkout@v5
+
+      - name: setup environment
+        uses: actions/setup-node@v5
+        with:
+          node-vaersion: ${{ inputes.node_version }}
+
+      - name: install dependencies
+        run: npm install
+    
+      - if: inputs.run_tests == 'true'
+        name: run tests
+        id: result
+        run: npm test
+
+    
+    
+    
