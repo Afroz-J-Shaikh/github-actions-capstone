@@ -1,0 +1,42 @@
+name: main pipeline
+
+on:
+  push:
+    branches: [main]
+  
+jobs:
+  
+  short:
+    runs-on: ubuntu-latest
+    steps:
+      - name: short sha
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+  build-test:
+    uses: ./.github/workflows/reusable-build-test.yml
+    with:
+      node_version: 20
+      run_tests: true
+
+  docker:
+    needs: build-test
+    uses: ./.github/workflows/reusable-docker.yml
+    with:
+      image_name: "my-app"
+      tags: |
+        - latest
+        - ${{ env.SHORT_SHA }}
+    secrets:
+      DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      
+      - name: print
+        run: |
+          echo "Deploying image: ${{ needs.docker.outputs.image_url }} to production"
+   
