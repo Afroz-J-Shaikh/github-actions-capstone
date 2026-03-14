@@ -9,6 +9,7 @@ on:
       node_version:
         type: string
         default: '20'
+        required: false
 
       run_tests:
         type: boolean
@@ -25,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      result: ${{ steps.result.outcome }}
+      result: ${{ steps.set-result.outcome }}
 
     steps:
 
@@ -35,14 +36,14 @@ jobs:
       - name: setup environment
         uses: actions/setup-node@v5
         with:
-          node-vaersion: ${{ inputes.node_version }}
+          node-vaersion: ${{ inputs.node_version }}
 
       - name: install dependencies
         run: npm install
     
-      - if: inputs.run_tests == 'true'
+      - if: ${{ inputs.run_tests }}
         name: run tests
-        id: result
+        id: set-result
         run: npm test
 
     
