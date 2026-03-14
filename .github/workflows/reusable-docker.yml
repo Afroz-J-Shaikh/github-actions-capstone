@@ -14,7 +14,9 @@ on:
         required: false
 
     outputs:
-      value: ${{ jobs.build.outputs.url }}
+      
+      image_url:
+        value: ${{ jobs.build.outputs.url }}
 
     secrets:
      
@@ -52,5 +54,5 @@ jobs:
         id: set-url
         run: |
           tags="${{ steps.get-url.outputs.tags }}"
-          digest="${{ steps.set-url.outputs.digest }}"
-          echo "url=$(tags)@$(digest)" >> $GITHUB_OUTPUT
+          digest="${{ steps.get-url.outputs.digest }}"
+          echo "url=$tags@$digest" >> $GITHUB_OUTPUT
