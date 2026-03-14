@@ -19,13 +19,13 @@ jobs:
       run_tests: true
 
   docker:
-    needs: build-test
+    needs: [build-test, short]
     uses: ./.github/workflows/reusable-docker.yml
     with:
       image_name: "my-app"
       tags: |
         - latest
-        - ${{ env.SHORT_SHA }}
+        - ${{ needs.short.outputs.SHORT_SHA }}
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
