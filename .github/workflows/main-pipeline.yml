@@ -8,8 +8,11 @@ jobs:
   
   short:
     runs-on: ubuntu-latest
+    outputs:
+      SHORT_SHA: ${{ steps.short-sha.outputs.SHORT_SHA }}
     steps:
       - name: short sha
+        id: short-sha
         run: |
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
