@@ -21,3 +21,28 @@ The repository contains a full-stack Node.js and React application:
 2. **Start Dev Server**: `npm run dev` (starts Vite out-of-the-box frontend proxying)
 3. **Start Production Server**: `npm start` (Runs the full Express `server.js` stack on port 3000)
 
+## Badges
+
+[![pr pipeline](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/pr-pipeline.yml/badge.svg?branch=feature&event=pull_request)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/pr-pipeline.yml)
+
+[![main pipeline](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/main-pipeline.yml/badge.svg)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/main-pipeline.yml)
+
+[![health checkout](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/health-check.yml/badge.svg)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/health-check.yml)
+
+## Pipeline Architecture Diagram
+
+```mermaid
+graph TD
+    A[PR opened] --> B[Build & Test]
+    B -->|Pass| C[PR Comment]
+    B -->|Fail| D[PR Comment]
+    
+    E[Push to main] --> F[Build & Test]
+    F -->|Pass| G[Docker Build & Push]
+    F -->|Fail| H[PR Comment]
+    
+    G --> I[Deploy]
+    I --> J[Health Check]
+    J -->|Pass| K[Summary]
+    J -->|Fail| L[Summary]
+```
