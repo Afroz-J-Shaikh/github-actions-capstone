@@ -12,6 +12,11 @@
     "react-dom": "^19.2.4",
     "tar": "^7.5.11"
   },
+  "overrides": {
+    "glob": {
+      "minimatch": "10.2.3"
+    }
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "vite",
