@@ -1,0 +1,49 @@
+name: health checkout
+
+on:
+  cron:
+    - '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+
+  health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      
+      - name: Pull latest docker image
+        run: docker pull my-app:latest
+
+      - name: Run container
+        run: docker run -d -p 3000:3000 my-app:latest
+
+      - name: Health check
+        id: check
+        run: |
+          sleep 5s
+          status=$(curl -f http://localhost:3000/api/hello)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Health Check FAILED"
+            exit 1
+          else
+            echo "Health Check PASSED"
+          fi
+        
+      - name: Stop & Remove
+        run: docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+
+      - name: summary
+        if: steps.check.outcome == 'success'
+        run: |
+          echo "## Health Check Report" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: my-app:latest" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "- Time: $(date)" >> $GITHUB_STEP_SUMMARY
+        

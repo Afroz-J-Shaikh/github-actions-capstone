@@ -12,7 +12,6 @@ on:
       tags:
         type: string
         required: false
-        #default: 'latest'
         
     outputs:
       
