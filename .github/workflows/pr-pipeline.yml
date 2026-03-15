@@ -15,7 +15,10 @@ jobs:
 
     needs: build-test
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
+      contents: read     # Required for checkout
+      issues: write
     if: needs.build-test.result == 'success'
 
     steps:
