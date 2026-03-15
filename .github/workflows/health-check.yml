@@ -19,10 +19,10 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: Pull latest docker image
-        run: docker pull my-app:latest
+        run: docker pull afroz25/my-app:latest
 
       - name: Run container
-        run: docker run -d -p 3000:3000 my-app:latest
+        run: docker run -d -p 3000:3000 afroz25/my-app:latest
 
       - name: Health check
         id: check
