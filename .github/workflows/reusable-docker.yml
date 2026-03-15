@@ -12,7 +12,7 @@ on:
       tags:
         type: string
         required: false
-        default: 'latest'
+        #default: 'latest'
         
     outputs:
       
@@ -50,7 +50,6 @@ jobs:
           context: .
           push: true
           tags: |-
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:latest
             ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:${{ inputs.tags }}
 
       - name: output

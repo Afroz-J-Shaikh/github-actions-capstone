@@ -2,8 +2,8 @@ name: main pipeline
 
 on:
   workflow_dispatch:
-  #push:
-    #branches: [main]
+  push:
+    branches: [main]
   
 jobs:
   
@@ -28,7 +28,10 @@ jobs:
     uses: ./.github/workflows/reusable-docker.yml
     with:
       image_name: "my-app"
-      tags: sha-${{ needs.short.outputs.SHORT_SHA }}
+      #tags: sha-${{ needs.short.outputs.SHORT_SHA }}
+      tags: |
+        - latest
+        - sha-${{ needs.short.outputs.SHORT_SHA }}
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
