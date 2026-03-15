@@ -37,12 +37,11 @@ graph TD
     B -->|Pass| C[PR Comment]
     B -->|Fail| D[PR Comment]
     
-    E[Push to main] --> F[Build & Test]
-    F -->|Pass| G[Docker Build & Push]
-    F -->|Fail| H[PR Comment]
+    A[Merge to main] --> B[Build & Test]
+    B -->|Pass| C[Docker Build & Push]
+    C -->|Pass| D[Print Deploy to Production]
     
-    G --> I[Deploy]
-    I --> J[Health Check]
-    J -->|Pass| K[Summary]
-    J -->|Fail| L[Summary]
+    A[Deploy] --> B[Health Check]
+    B -->|Pass| C[Summary]
+    B -->|Fail| D[Summary]
 ```
