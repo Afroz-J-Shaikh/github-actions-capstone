@@ -1,38 +1,32 @@
-FROM node:20-slim AS builder
-
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libc6 libc-bin && \
-    apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
-
+# 1. Standardize the build
 COPY package*.json ./
-
-RUN npm ci
-
+RUN npm ci 
 COPY . .
-
 RUN npm run build
 
-RUN ls -la /app
-
+# --- RUNNER STAGE ---
 FROM node:20-alpine AS runner
-
 WORKDIR /app
-
 ENV NODE_ENV=production
 
-RUN apk update && apk upgrade
-    
-# Copy built assets and server file
+# 2. Patch Alpine OS
+RUN apk update && apk upgrade --no-cache
+
+# 3. Copy ONLY what is needed for production
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/server.js ./server.js
 COPY --from=builder /app/package*.json ./
 
-# Install only production dependencies (express)
-RUN npm install --omit=dev
+# 4. Copy the node_modules directly from the builder
+# This ensures the "overridden" and "deduped" versions are preserved!
+COPY --from=builder /app/node_modules ./node_modules
 
+# 5. Clean up devDependencies if necessary (Optional but safer)
+RUN npm prune --omit=dev
+
+USER node
 EXPOSE 3000
-
 CMD ["node", "server.js"]
