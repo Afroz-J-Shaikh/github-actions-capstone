@@ -24,7 +24,7 @@ jobs:
         #run: |
         #  echo "PR checks passed for branch :" ${{ github.head_ref }}
         #  echo "Test results :" ${{ needs.build-test.outputs.test_result }}
-        uses: actions/github-script
+        uses: actions/github-script@v7
         with:
           script: |
             const issue_number = context.issue.number;
