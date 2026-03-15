@@ -21,6 +21,19 @@ jobs:
     steps:
 
       - name: print summary
-        run: |
-          echo "PR checks passed for branch :" ${{ github.head_ref }}
-          echo "Test results :" ${{ needs.build-test.outputs.test_result }}
+        #run: |
+        #  echo "PR checks passed for branch :" ${{ github.head_ref }}
+        #  echo "Test results :" ${{ needs.build-test.outputs.test_result }}
+        uses: actions/github-script
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            await github.rest.issues.createComment({
+              issue_number: issue_number,
+              owner: owner,
+              repo: repo,
+              body: 'PR checks passed for branch : ${{ github.head_ref }}'
+            });
