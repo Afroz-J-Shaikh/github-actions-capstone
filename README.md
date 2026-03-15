@@ -41,7 +41,8 @@ graph TD
     F -->|Pass| G[Docker Build & Push]
     G -->|Pass| H[Print Deploy to Production]
     
-    I[Deploy] --> J[Health Check]
-    J -->|Pass| K[Summary]
-    J -->|Fail| L[Summary]
+    I[Deploy] --> J[Every 12 hours]
+    J --> K[Health Check]
+    K -->|Pass| L[Summary]
+    K -->|Fail| M[Summary]
 ```
