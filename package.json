@@ -13,9 +13,9 @@
     "tar": "7.5.11"
   },
   "overrides": {
-    "glob": {
-      "minimatch": "10.2.3"
-    }
+    "glob": "10.5.0",
+    "minimatch": "10.2.3",
+    "tar": "7.5.11"
   },
   "scripts": {
     "start": "node server.js",

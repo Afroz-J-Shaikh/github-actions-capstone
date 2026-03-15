@@ -21,7 +21,6 @@ COPY --from=builder /app/server.js ./server.js
 COPY --from=builder /app/package*.json ./
 
 # 4. Copy the node_modules directly from the builder
-# This ensures the "overridden" and "deduped" versions are preserved!
 COPY --from=builder /app/node_modules ./node_modules
 
 # 5. Clean up devDependencies if necessary (Optional but safer)
