@@ -50,6 +50,7 @@ jobs:
         id: get-url
         with:
           context: .
+          no-cache: true
           push: true
           tags: |-
             ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:${{ matrix.tag }}
