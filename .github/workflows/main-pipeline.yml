@@ -29,9 +29,7 @@ jobs:
     with:
       image_name: "my-app"
       #tags: sha-${{ needs.short.outputs.SHORT_SHA }}
-      tags: |
-        - latest
-        - sha-${{ needs.short.outputs.SHORT_SHA }}
+      tags: [latest,sha-${{ needs.short.outputs.SHORT_SHA }}]
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
