@@ -2,6 +2,11 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libc6 libc-bin && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 
 RUN npm install
@@ -18,6 +23,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+RUN apt-get update && \
+    apt-get upgrade -y libc6 libc-bin && \
+    rm -rf /var/lib/apt/lists/*
+    
 # Copy built assets and server file
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/server.js ./server.js

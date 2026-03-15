@@ -2,8 +2,8 @@ name: main pipeline
 
 on:
   workflow_dispatch:
-  #push:
-    #branches: [main]
+  push:
+    branches: [main]
   
 jobs:
   
@@ -46,7 +46,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   deploy:
-    needs: docker
+    needs: [docker, scan]
     runs-on: ubuntu-latest
     environment: production
     steps:
