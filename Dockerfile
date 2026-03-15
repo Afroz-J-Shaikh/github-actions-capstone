@@ -17,15 +17,13 @@ RUN npm run build
 
 RUN ls -la /app
 
-FROM node:20-slim AS runner
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN apt-get update && \
-    apt-get upgrade -y libc6 libc-bin && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk update && apk upgrade
     
 # Copy built assets and server file
 COPY --from=builder /app/build ./build
