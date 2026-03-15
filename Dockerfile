@@ -2,8 +2,8 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # 1. Standardize the build
-COPY package*.json ./
-RUN npm ci 
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev
 COPY . .
 RUN npm run build
 
