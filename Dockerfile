@@ -1,9 +1,13 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# 1. Standardize the build
+# 1. Use ONLY the lockfiles first to leverage Docker cache
 COPY package.json package-lock.json ./
-RUN npm install
+
+# 2. Force a clean install that matches your patched lockfile EXACTLY
+# This is the most important change for passing the security scan.
+RUN npm ci 
+
 COPY . .
 RUN npm run build
 
@@ -12,18 +16,19 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# 2. Patch Alpine OS
+# 3. Patch Alpine OS
 RUN apk update && apk upgrade --no-cache
 
-# 3. Copy ONLY what is needed for production
+# 4. Copy ONLY production assets
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/server.js ./server.js
-COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/package.json /app/package-lock.json ./
 
-# 4. Copy the node_modules directly from the builder
+# 5. Copy the node_modules and then prune
 COPY --from=builder /app/node_modules ./node_modules
 
-# 5. Clean up devDependencies if necessary (Optional but safer)
+# This removes the dev-tools (like Vite/Vitest) that contained the 
+# vulnerable 'minimatch' version 9, leaving only your safe 10.2.3 version.
 RUN npm prune --omit=dev
 
 USER node
