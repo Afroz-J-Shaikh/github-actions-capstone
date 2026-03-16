@@ -2,7 +2,8 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache zlib>=1.3.2-r0
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache zlib=1.3.2-r0
 
 RUN npm install -g npm@latest
 
@@ -19,7 +20,8 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-RUN apk update && apk add --no-cache zlib>=1.3.2-r0
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache zlib=1.3.2-r0
 
 COPY --from=builder /app ./
 
