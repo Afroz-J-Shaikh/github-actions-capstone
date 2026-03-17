@@ -51,7 +51,16 @@ jobs:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db,aquasecurity/trivy-db # Use a backup DB if rate-limited
           TRIVY_NO_PROGRESS: "true"
           TRIVY_CACHE_DIR: .trivycache # Force a fresh directory
-
+      - name: sarif output
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ vars.DOCKER_USERNAME }}/my-app:sha-${{ needs.short.outputs.SHORT_SHA }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      - name: upload sarif
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
   deploy:
     needs: [docker, scan]
     runs-on: ubuntu-latest
