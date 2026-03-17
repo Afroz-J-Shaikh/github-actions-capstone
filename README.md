@@ -40,13 +40,14 @@ graph TD
     
     E[Merge to main] --> F[Build & Test]
     F -->|Pass| G[Docker Build & Push]
-    G -->|Pass| E[Deploy]
-    G -->|Fail| H[Exit]
+    G -->|Pass| E[Trivy image scan]
+    E -->|Pass| H[Deploy]
+    E -->|Fail| I[Exit]
     
-    I[Deploy] --> J[Every 12 hours]
-    J --> K[Health Check]
-    K -->|Pass| L[Summary]
-    K -->|Fail| M[Summary]
+    J[Deploy] --> K[Every 12 hours]
+    K --> L[Health Check]
+    L-->|Pass| M[Summary]
+    L -->|Fail| M[Summary]
 
     N[Always active] --> O[GitHub secret scanning]
     N --> P[push protection for secrets]
