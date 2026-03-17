@@ -49,7 +49,7 @@ graph TD
     K -->|Fail| M[Summary]
 
     N[Always active] --> O[GitHub secret scanning]
-    N[Always active] --> O[push protection for secrets]
+    N --> P[push protection for secrets]
 ```
 
 ## Next Steps
