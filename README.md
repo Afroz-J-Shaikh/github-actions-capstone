@@ -34,26 +34,24 @@ The repository contains a full-stack Node.js and React application:
 ```mermaid
 graph TD
     A[PR opened] --> B[Build & Test]
-    B -->|Pass| C[dependency vulnerability check]
-    C -->|Pass| D[PR Comment]
-    B -->|Fail| D[PR Comment]
+    B -->|Pass| C[Dependency vulnerability check]
+    C --> D[PR Comment]
     
     E[Merge to main] --> F[Build & Test]
     F -->|Pass| G[Docker Build & Push]
-    G -->|Pass| H[Print Deploy to Production]
-    
-    I[Deploy] --> J[Every 12 hours]
-    J --> K[Health Check]
-    K -->|Pass| L[Summary]
-    K -->|Fail| M[Summary]
+    G -->|Pass| H[Trivy image scan]
+    H -->|Pass| I[Deploy to environment]
+    H -->|Fail| J[Exit]
+
+    I --> K[Every 12 hours]
+    K --> L[Health Check]
+    L --> M[Summary]
+
+    N[Always active] --> O[GitHub secret scanning]
+    N --> P[Push protection for secrets]
 ```
 
 ## Next Steps
-
-* Add security (DevSecOps)
-    1. Add `aquasecurity/trivy-action` after the Docker build step to scan image for vulnerabilities
-    2. Fail the pipeline if any **CRITICAL** severity CVE is found
-    3. Upload the scan report as an artifact
 
 * Add Slack notifications
     1. Add `slackapi/slack-github-action` after the Docker build step to send a notification to a Slack channel
