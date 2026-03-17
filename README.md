@@ -53,11 +53,6 @@ graph TD
 
 ## Next Steps
 
-* Add security (DevSecOps)
-    1. Add `aquasecurity/trivy-action` after the Docker build step to scan image for vulnerabilities
-    2. Fail the pipeline if any **CRITICAL** severity CVE is found
-    3. Upload the scan report as an artifact
-
 * Add Slack notifications
     1. Add `slackapi/slack-github-action` after the Docker build step to send a notification to a Slack channel
     2. Send a success message with the image URL and tags
