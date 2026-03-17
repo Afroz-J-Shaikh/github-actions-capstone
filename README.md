@@ -34,7 +34,8 @@ The repository contains a full-stack Node.js and React application:
 ```mermaid
 graph TD
     A[PR opened] --> B[Build & Test]
-    B -->|Pass| C[PR Comment]
+    B -->|Pass| C[dependency vulnerability check]
+    C -->|Pass| D[PR Comment]
     B -->|Fail| D[PR Comment]
     
     E[Merge to main] --> F[Build & Test]
