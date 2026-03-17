@@ -34,23 +34,21 @@ The repository contains a full-stack Node.js and React application:
 ```mermaid
 graph TD
     A[PR opened] --> B[Build & Test]
-    B -->|Pass| C[dependency vulnerability check]
-    C -->|Pass| D[PR Comment]
-    C -->|Fail| D[PR Comment]
+    B -->|Pass| C[Dependency vulnerability check]
+    C --> D[PR Comment]
     
     E[Merge to main] --> F[Build & Test]
     F -->|Pass| G[Docker Build & Push]
-    G -->|Pass| E[Trivy image scan]
-    E -->|Pass| H[Deploy]
-    E -->|Fail| I[Exit]
-    
-    J[Deploy] --> K[Every 12 hours]
+    G -->|Pass| H[Trivy image scan]
+    H -->|Pass| I[Deploy to environment]
+    H -->|Fail| J[Exit]
+
+    I --> K[Every 12 hours]
     K --> L[Health Check]
-    L-->|Pass| M[Summary]
-    L -->|Fail| M[Summary]
+    L --> M[Summary]
 
     N[Always active] --> O[GitHub secret scanning]
-    N --> P[push protection for secrets]
+    N --> P[Push protection for secrets]
 ```
 
 ## Next Steps
