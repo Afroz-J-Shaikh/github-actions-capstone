@@ -21,3 +21,40 @@ The repository contains a full-stack Node.js and React application:
 2. **Start Dev Server**: `npm run dev` (starts Vite out-of-the-box frontend proxying)
 3. **Start Production Server**: `npm start` (Runs the full Express `server.js` stack on port 3000)
 
+## Badges
+
+[![pr pipeline](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/pr-pipeline.yml/badge.svg?branch=feature&event=pull_request)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/pr-pipeline.yml)
+
+[![main pipeline](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/main-pipeline.yml/badge.svg)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/main-pipeline.yml)
+
+[![health checkout](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/health-check.yml/badge.svg)](https://github.com/Afroz-J-Shaikh/github-actions-capstone/actions/workflows/health-check.yml)
+
+## Pipeline Architecture Diagram
+
+```mermaid
+graph TD
+    A[PR opened] --> B[Build & Test]
+    B -->|Pass| C[PR Comment]
+    B -->|Fail| D[PR Comment]
+    
+    E[Merge to main] --> F[Build & Test]
+    F -->|Pass| G[Docker Build & Push]
+    G -->|Pass| H[Print Deploy to Production]
+    
+    I[Deploy] --> J[Every 12 hours]
+    J --> K[Health Check]
+    K -->|Pass| L[Summary]
+    K -->|Fail| M[Summary]
+```
+
+## Next Steps
+
+* Add security (DevSecOps)
+    1. Add `aquasecurity/trivy-action` after the Docker build step to scan image for vulnerabilities
+    2. Fail the pipeline if any **CRITICAL** severity CVE is found
+    3. Upload the scan report as an artifact
+
+* Add Slack notifications
+    1. Add `slackapi/slack-github-action` after the Docker build step to send a notification to a Slack channel
+    2. Send a success message with the image URL and tags
+    3. Send a failure message with the error details

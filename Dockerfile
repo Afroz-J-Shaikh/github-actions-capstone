@@ -1,31 +1,32 @@
-FROM node:20-slim AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache zlib=1.3.2-r0
+
+RUN npm install -g npm@latest
+
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
 RUN npm run build
 
-RUN ls -la /app
 
-FROM node:20-slim AS runner
+FROM node:22-alpine
 
 WORKDIR /app
 
-ENV NODE_ENV=production
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache zlib=1.3.2-r0
 
-# Copy built assets and server file
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/server.js ./server.js
-COPY --from=builder /app/package*.json ./
+COPY --from=builder /app ./
 
-# Install only production dependencies (express)
-RUN npm install --omit=dev
+RUN rm -rf /usr/local/lib/node_modules/npm
 
+USER node
 EXPOSE 3000
-
 CMD ["node", "server.js"]

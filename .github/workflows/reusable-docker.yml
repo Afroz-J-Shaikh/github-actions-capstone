@@ -12,7 +12,6 @@ on:
       tags:
         type: string
         required: false
-        default: 'latest'
         
     outputs:
       
@@ -32,6 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.set-url.outputs.url}}
+    strategy:
+      matrix:
+        tag: ${{ fromJSON(inputs.tags) }} # This converts the string back into a list
     steps:
 
       - name: checkout
@@ -48,11 +50,11 @@ jobs:
         id: get-url
         with:
           context: .
+          no-cache: true
           push: true
           tags: |-
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:${{ inputs.tags }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image_name }}:${{ matrix.tag }}
 
       - name: output
         id: set-url
-        run: echo "url=${{ inputs.image_name }}:${{ inputs.tags }}" >> "$GITHUB_OUTPUT"
+        run: echo "url=${{ inputs.image_name }}:${{ matrix.tag }}" >> "$GITHUB_OUTPUT"

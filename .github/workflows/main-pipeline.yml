@@ -2,8 +2,8 @@ name: main pipeline
 
 on:
   workflow_dispatch:
-  #push:
-    #branches: [main]
+  push:
+    branches: [main]
   
 jobs:
   
@@ -28,13 +28,29 @@ jobs:
     uses: ./.github/workflows/reusable-docker.yml
     with:
       image_name: "my-app"
-      tags: sha-${{ needs.short.outputs.SHORT_SHA }}
+      tags: '["latest", "sha-${{ needs.short.outputs.SHORT_SHA }}"]'
     secrets:
       DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
+  scan:
+    needs: [docker, short]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan Docker Image for Vulnerabilities
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: '${{ vars.DOCKER_USERNAME }}/my-app:sha-${{ needs.short.outputs.SHORT_SHA }}'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db,aquasecurity/trivy-db # Use a backup DB if rate-limited
+          TRIVY_NO_PROGRESS: "true"
+          TRIVY_CACHE_DIR: .trivycache # Force a fresh directory
+
   deploy:
-    needs: docker
+    needs: [docker, scan]
     runs-on: ubuntu-latest
     environment: production
     steps:
